@@ -20,9 +20,6 @@ class Deck:
             for nb in range(1, 14):
                 self.cards.append(Card(s, nb))
 
-    def remainingCards(self):
-        print(len(self.cards))
-
     def shuffle(self):
         n = len(self.cards)
         newDeck = []
@@ -30,29 +27,74 @@ class Deck:
             r = random.randint(0, n-i)
             newDeck.append(self.cards[r])
             del self.cards[r]
-        print(len(newDeck))
         self.cards = newDeck
 
     def show(self):
         for c in self.cards:
             c.show()
 
-    def distribute(self, draws):
-        cards_dist = self.cards[0:draws]
-        del self.cards[0:draws]
-        return cards_dist
+    def draw(self):
+        return self.cards.pop()
 
 
 class Player:
-    def __init__(self, cards, tokens):
-        self.cards = cards
+    def __init__(self, tokens=0):
         self.tokens = tokens
+        self.cards = []
 
-    def getCards(self):
-        print(self.cards)
+    def draw(self, deck, draws=1):
+        for _ in range(draws):
+            self.cards.append(deck.draw())
+
+    def showCards(self):
+        for c in self.cards:
+            c.show()
+
+    def showTokens(self):
+        print("You currently have %d tokens" % self.tokens)
+
+    def bet(self, amt, pot):
+        self.tokens -= amt
+        pot.add(amt)
+
+
+class Pot:
+    def __init__(self):
+        self.amount = 0
+
+    def add(self, amt):
+        self.amount += amt
+
+
+def getCommunityCards(communityCards, fold, nb):
+    fold.draw(deck, 1)
+    communityCards.draw(deck, nb)
+    communityCards.showCards()
+
+
+def betting(player, pot):
+    bet = input("How much do you want to bet? ")
+    bet = int(bet)
+    player.bet(bet, pot)
+    player.showTokens()
 
 
 deck = Deck()
 deck.shuffle()
-deck.show()
-deck.distribute(2)
+hugo = Player(1000)
+communityCards = Player()
+fold = Player()
+pot = Pot()
+
+hugo.draw(deck, 2)
+hugo.showCards()
+hugo.showTokens()
+
+betting(hugo, pot)
+getCommunityCards(communityCards, fold, 3)
+
+betting(hugo, pot)
+getCommunityCards(communityCards, fold, 1)
+
+betting(hugo, pot)
+getCommunityCards(communityCards, fold, 1)
