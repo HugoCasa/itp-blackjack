@@ -113,7 +113,7 @@ def getScore(cards):
                 print("There is a pair")
         # threekind
         for three in combinations(combi, 3):
-            if three[0] == three[1] == three[2]:
+            if three[0] == three[1] and three[1] == three[2]:
                 print("There is three of a kind")
         # carre
         for four in combinations(combi, 4):
@@ -123,12 +123,9 @@ def getScore(cards):
         combi_sorted = sorted(combi)
         hp = np.array([c.number for c in combi_sorted[1:5]])
         lp = np.array([c.number for c in combi_sorted[0:4]])
-        if np.all(hp-lp == 1):
+        print(hp-lp)
+        if np.array(hp-lp).all() == 1:
             print("There is a straight")
-            if combi[0].suit == combi[1].suit == combi[2].suit == combi[3].suit == combi[4].suit:
-                print("There is a straight flush")
-                if combi_sorted[4].number == 1:
-                    print("There is a royal flush")
         # flush
         if combi[0].suit == combi[1].suit == combi[2].suit == combi[3].suit == combi[4].suit:
             print("There is a flush")
