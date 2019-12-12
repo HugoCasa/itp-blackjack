@@ -1,39 +1,27 @@
 import random
 import numpy as np
-from itertools import combinations
 
 
 class Card:
+    heads = ["Ace", "Jack", "Queen", "King"]
+
     def __init__(self, suit, nb):
         self.suit = suit
         self.number = nb
+        if nb in [11, 12, 13]:
+            self.number = Card.heads[nb-10]
+            self.value = 10
+        elif nb == 1:
+            self.number = Card.heads[nb-1]
+            self.value = 11
+        else:
+            self.value = nb
 
     def show(self):
         print("%s of %s" % (self.number, self.suit))
 
     def __add__(self, o):
-        return self.number + o.number
-
-    def __sub__(self, o):
-        return self.number - o.number
-
-    def __eq__(self, o):
-        if(self.number == o.number):
-            return True
-        else:
-            return False
-
-    def __gt__(self, o):
-        if(self.number > o.number):
-            return True
-        else:
-            return False
-
-    def __lt__(self, o):
-        if(self.number < o.number):
-            return True
-        else:
-            return False
+        return self.value + o.value
 
 
 class Deck:
@@ -64,96 +52,155 @@ class Deck:
 
 
 class Player:
-    def __init__(self, tokens=0):
-        self.tokens = tokens
+    def __init__(self, chips=0):
+        self.chips = chips
         self.cards = []
+        self.aces = 0
 
-    def draw(self, deck, draws=1):
-        for _ in range(draws):
-            self.cards.append(deck.draw())
+    def draw(self, deck):
+        tempCard = deck.draw()
+        self.cards.append(tempCard)
+        if tempCard.value == 11:
+            self.aces += 1
 
     def showCards(self):
         for c in self.cards:
             c.show()
 
-    def showTokens(self):
-        print("You currently have %d tokens" % self.tokens)
+    def showChips(self):
+        print("You currently have %d chips" % self.chips)
 
     def bet(self, amt, pot):
-        self.tokens -= amt
+        self.chips -= amt
         pot.add(amt)
+
+    def wins(self, pot):
+        print("You won!")
+        self.chips += pot.chips
+
+    def getCardsValue(self):
+        val = sum(c.value for c in self.cards)
+        remainingAces = self.aces
+        while val > 21 and remainingAces != 0:
+            val = val - 10
+            remainingAces -= 1
+        if val > 21:
+            return 0
+        else:
+            return(val)
 
 
 class Pot:
     def __init__(self):
-        self.amount = 0
+        self.chips = 0
 
-    def add(self, amt):
-        self.amount += amt
-
-
-def getCommunityCards(communityCards, fold, nb):
-    fold.draw(deck, 1)
-    communityCards.draw(deck, nb)
-    communityCards.showCards()
+    def add(self, chips):
+        self.chips += chips
 
 
-def betting(player, pot):
-    bet = input("How much do you want to bet? ")
-    bet = int(bet)
-    player.bet(bet, pot)
-    player.showTokens()
+def betting(player, dealer, pot):
+    player.showChips()
+    try:
+        bet = input("How much do you want to bet? ")
+        bet = int(bet)
+        player.bet(bet, pot)
+        dealer.bet(bet, pot)
+    except:
+        print("Please enter a valid number")
 
 
-def getScore(cards):
-    for combi in combinations(cards, 5):
-        # pair
-        for two in combinations(combi, 2):
-            if two[0] == two[1]:
-                print("There is a pair")
-        # threekind
-        for three in combinations(combi, 3):
-            if three[0] == three[1] == three[2]:
-                print("There is three of a kind")
-        # carre
-        for four in combinations(combi, 4):
-            if four[0] == four[1] == four[2] == four[3]:
-                print("There is four of a kind")
-        # straight
-        combi_sorted = sorted(combi)
-        hp = np.array([c.number for c in combi_sorted[1:5]])
-        lp = np.array([c.number for c in combi_sorted[0:4]])
-        if np.all(hp-lp == 1):
-            print("There is a straight")
-            if combi[0].suit == combi[1].suit == combi[2].suit == combi[3].suit == combi[4].suit:
-                print("There is a straight flush")
-                if combi_sorted[4].number == 1:
-                    print("There is a royal flush")
-        # flush
-        if combi[0].suit == combi[1].suit == combi[2].suit == combi[3].suit == combi[4].suit:
-            print("There is a flush")
+def strategy(player, dealer, deck, pot):
+    print("1) Hit")
+    print("2) Stand")
+    print("3) Double")
+    if len(player.cards) == 2 and player.cards[0].number == player.cards[1].number:
+        print("4) Split")
+    try:
+        choice = input("What would you like to do? ")
+        choice = int(choice)
+        if choice == 1:
+            player.draw(deck)
+            player.showCards()
+            return not player.getCardsValue()
+        elif choice == 2:
+            return True
+        elif choice == 3 and len(player.cards) == 2:
+            player.bet(pot.chips/2, pot)
+            dealer.bet(pot.chips/2, pot)
+            player.draw(deck)
+            player.showCards()
+            return True
+        else:
+            print("Please enter a number between 1 and 4")
+            return False
+
+    except:
+        print("Please enter a number between 1 and 4")
 
 
-# deck = Deck()
-# deck.shuffle()
-# hugo = Player(1000)
-# communityCards = Player()
-# fold = Player()
-# pot = Pot()
+def dealerStrategy(player, deck):
+    val = player.getCardsValue()
+    while val <= 16:
+        player.draw(deck)
+        val = player.getCardsValue()
 
-# hugo.draw(deck, 2)
-# hugo.showCards()
-# hugo.showTokens()
 
-# betting(hugo, pot)
-# getCommunityCards(communityCards, fold, 3)
+def game(player):
+    dealer = Player(1000)
+    deck = Deck()
+    deck.shuffle()
+    pot = Pot()
 
-# betting(hugo, pot)
-# getCommunityCards(communityCards, fold, 1)
+    # Players bet
+    betting(player, dealer, pot)
 
-# betting(hugo, pot)
-# getCommunityCards(communityCards, fold, 1)
+    # distribute cards
+    player.draw(deck)
+    dealer.draw(deck)
+    player.draw(deck)
 
-testCards = [Card("Hearts", 1), Card("Hearts", 2), Card("Hearts", 3), Card(
-    "Hearts", 10), Card("Hearts", 4), Card("Hearts", 7), Card("Hearts", 5)]
-getScore(testCards)
+    # show player's cards and 1st dealer's card
+    print("Your cards: ")
+    player.showCards()
+
+    print("Dealer's card: ")
+    dealer.showCards()
+
+    # distribute dealer's second card
+    dealer.draw(deck)
+
+    # loop trough decision taking
+    done = False
+    while not done:
+        done = strategy(player, dealer, deck, pot)
+
+    # check whether player wins or not
+    cardsValue = player.getCardsValue()
+    if cardsValue:
+        dealerStrategy(dealer, deck)
+        print("Dealer's cards:")
+        dealer.showCards()
+        if (cardsValue > dealer.getCardsValue()) or not dealer.getCardsValue():
+            if cardsValue == 21:
+                print("BlackJack")
+            player.wins(pot)
+        else:
+            print("You lost!")
+    else:
+        print("You lost!")
+
+    player.showChips()
+
+
+def main():
+    player = Player(1000)
+    wannaPlay = True
+    while wannaPlay and player.chips > 0:
+        player = Player(player.chips)
+        game(player)
+        choice = input("Would you like to play again? (y/n) ")
+        if choice != "y":
+            wannaPlay = False
+
+
+main()
