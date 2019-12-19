@@ -365,8 +365,8 @@ def dealerStrategy(dealer, deck):
     Hits if cards value is equal or lower than 16 and higher than 0 (reminder: 0 is returned when the cards value is over 21).
 
     Args:
-        dealer: a Player class
-        deck: a Deck class
+        dealer: a Player class.
+        deck: a Deck class.
     """
     val = dealer.getCardsValue()
     while val <= 16 and val > 0:
@@ -400,7 +400,7 @@ def game(player):
     One round game process.
 
     Args:
-      player: a Player instance
+      player: a Player instance.
 
     """
     # initiates the dealer (every round -> unlimited money), the deck and the pot
@@ -471,7 +471,7 @@ def game(player):
             print("You won")
             player.wins(pot)
         else:
-            # if not then losses
+            # if not then loses
             print("You lost!")
     else:
         print("You lost!")
