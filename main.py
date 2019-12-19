@@ -12,13 +12,14 @@ import numpy as np
 class Card:
     """Playing card class.
 
-    A play
+    A class for each card
 
     Attributes:
         suit: The suit of the card.
         number: The rank of the card.
         value: The value of the card in blackjack.
     """
+
     heads = ["Ace", "Jack", "Queen", "King"]
 
     def __init__(self, suit, nb):
@@ -47,17 +48,28 @@ class Card:
 
 
 class Deck:
+    """Deck class.
+
+    A class for a deck full of cards
+
+    Attributes:
+        cards: list which contains all the cards
+
+    """
+
     def __init__(self):
         """Inits Deck with empty cards array and call the build function to fill the deck."""
         self.cards = []
         self.build()
 
     def build(self):
+        """Fill up the deck with all the cards"""
         for s in ['Hearts', 'Spades', 'Diamonds', 'Clubs']:
             for nb in range(1, 14):
                 self.cards.append(Card(s, nb))
 
     def shuffle(self):
+        """Shuffle the deck"""
         n = len(self.cards)
         newDeck = []
         for i in range(1, n+1):
@@ -67,15 +79,31 @@ class Deck:
         self.cards = newDeck
 
     def show(self):
+        """Show all the cards in the deck"""
         for c in self.cards:
             c.show()
 
     def draw(self):
+        """Remove and returns the last card of the deck"""
         return self.cards.pop()
 
 
 class Player:
+    """Player class.
+
+    A class for the player
+
+    Attributes:
+        chips: chips of the player
+        cards: list with the cards of the player
+        splitCards: in case of a split, list with the second hand of the player
+        aces: number of aces of the player
+        splitAces: in case of a split, the number of aces in the second hand of the player
+
+    """
+
     def __init__(self, chips=0):
+        """Inits the Player with """
         self.chips = chips
         self.cards = []
         self.splitCards = []
@@ -197,7 +225,7 @@ def strategy(player, dealer, deck, pot):
     if len(player.cards) == 2 and not player.splitCards:
         if player.chips >= pot.chips/2:
             print("3) Double")
-            if player.cards[0].number == player.cards[1].number:
+            if player.cards[0].rank == player.cards[1].rank:
                 print("4) Split")
 
     try:
