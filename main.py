@@ -1,31 +1,54 @@
+"""A 1 player game of blackjack.
+
+This is a program for playing blackjack. It's for 1 player to play against the dealer.
+
+  To launch the game use main()
+"""
+
 import random
 import numpy as np
 
 
 class Card:
+    """Playing card class.
+
+    A play
+
+    Attributes:
+        suit: The suit of the card.
+        number: The rank of the card.
+        value: The value of the card in blackjack.
+    """
     heads = ["Ace", "Jack", "Queen", "King"]
 
     def __init__(self, suit, nb):
+        """Inits Card with the suit, the rank and the value."""
         self.suit = suit
-        self.number = nb
+        self.rank = nb
         if nb in [11, 12, 13]:
-            self.number = Card.heads[nb-10]
+            # assigns the rank and value for jack, queen and king
+            self.rank = Card.heads[nb-10]
             self.value = 10
         elif nb == 1:
-            self.number = Card.heads[nb-1]
+            # assigns the rank and value for ace
+            self.rank = Card.heads[nb-1]
             self.value = 11
         else:
+            # assigns the value for all other cards
             self.value = nb
 
     def show(self):
-        print("%s of %s" % (self.number, self.suit))
+        """Prints the rank and the suit of the card"""
+        print("%s of %s" % (self.rank, self.suit))
 
     def __add__(self, o):
+        """Prints the rank and the suit of the card"""
         return self.value + o.value
 
 
 class Deck:
     def __init__(self):
+        """Inits Deck with empty cards array and call the build function to fill the deck."""
         self.cards = []
         self.build()
 
@@ -60,8 +83,8 @@ class Player:
         self.splitAces = 0
 
     def draw(self, deck, split=False):
-        # tempCard = deck.draw()
-        tempCard = Card("Hearts", 8)
+        tempCard = deck.draw()
+        #tempCard = Card("Hearts", 8)
         if split:
             self.splitCards.append(tempCard)
             if tempCard.value == 11:
@@ -222,11 +245,16 @@ def outcome(playerCardsValue, dealerCardsValue):
             print("You have BlackJack!")
         return True
     else:
-        print("You lost!")
         return False
 
 
 def game(player):
+    """Game Process.
+
+    Args:
+      player: a Player instance
+
+    """
     dealer = Player(1000)
     deck = Deck()
     deck.shuffle()
@@ -301,6 +329,9 @@ def main():
     while wannaPlay and player.chips > 0:
         player = Player(player.chips)
         game(player)
+        if player.chips <= 0:
+            print("You don't have any money left! Go home!")
+            break
         choice = input("Would you like to play again? (y/n) ")
         if choice != "y":
             wannaPlay = False
