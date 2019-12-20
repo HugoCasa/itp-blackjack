@@ -1,4 +1,6 @@
-# Group project (Hugo Casademont, Thibaud Mottier, Francisco Broccard). Blackjack with Python.\*\*\*
+# Group project
+
+Blackjack with Python by Hugo Casademont, Thibaud Mottier and Francisco Broccard.
 
 ## About
 
