@@ -110,7 +110,6 @@ class Player:
             split: boolean to specify whether to add a card to the main hand or the second hand (in case of split).
         """
         tempCard = deck.draw()
-        #tempCard = Card("Hearts", 8)
         if split:
             self.splitCards.append(tempCard)
             if tempCard.value == 11:
