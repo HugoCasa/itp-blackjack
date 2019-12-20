@@ -6,7 +6,6 @@ This is a program for playing blackjack. It's for 1 player to play against the d
 """
 
 import random
-import numpy as np
 
 
 class Card:
@@ -261,43 +260,6 @@ def betting(player, dealer, pot):
             print("Please enter a valid number")
 
 
-def splitStrategy(player, deck, secondHand=False):
-    """Split decision process.
-
-    Offers two choices and act accordingly.
-
-    Args:
-        player: a Player class.
-        deck: a Deck class.
-        secondHand: boolean to know for which hand it is.
-
-    Returns:
-        True when the overall process is done (when the player stands).
-    """
-    if secondHand:
-        print("Second Hand:")
-    else:
-        print("First Hand:")
-    player.showCards(split=secondHand)
-    print("1) Hit")
-    print("2) Stand")
-    try:
-        choice = input("What would you like to do? ")
-        choice = int(choice)
-        if choice == 1:
-            player.draw(deck, split=secondHand)
-            player.showCards(split=secondHand)
-            return not player.getCardsValue(split=secondHand)
-        elif choice == 2:
-            return True
-        else:
-            print("Please enter a number between 1 and 2")
-            return False
-    except:
-        print("Please enter a number between 1 and 2")
-        return False
-
-
 def strategy(player, dealer, deck, pot):
     """Decision process.
 
@@ -359,6 +321,43 @@ def strategy(player, dealer, deck, pot):
         return False
 
 
+def splitStrategy(player, deck, secondHand=False):
+    """Split decision process.
+
+    Offers two choices and act accordingly.
+
+    Args:
+        player: a Player class.
+        deck: a Deck class.
+        secondHand: boolean to know for which hand it is.
+
+    Returns:
+        True when the overall process is done (when the player stands).
+    """
+    if secondHand:
+        print("Second Hand:")
+    else:
+        print("First Hand:")
+    player.showCards(split=secondHand)
+    print("1) Hit")
+    print("2) Stand")
+    try:
+        choice = input("What would you like to do? ")
+        choice = int(choice)
+        if choice == 1:
+            player.draw(deck, split=secondHand)
+            player.showCards(split=secondHand)
+            return not player.getCardsValue(split=secondHand)
+        elif choice == 2:
+            return True
+        else:
+            print("Please enter a number between 1 and 2")
+            return False
+    except:
+        print("Please enter a number between 1 and 2")
+        return False
+
+
 def dealerStrategy(dealer, deck):
     """Dealer automatic process.
 
@@ -403,8 +402,10 @@ def game(player):
       player: a Player instance.
 
     """
-    # initiates the dealer (every round -> unlimited money), the deck and the pot
-    dealer = Player(1000)
+    # initiates the dealer every round with the same number of chips as the player as it is maximum the player can win
+    dealer = Player(player.chips)
+
+    # initiates the deck (+ shuffle it) and the pot
     deck = Deck()
     deck.shuffle()
     pot = Pot()
