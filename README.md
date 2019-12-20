@@ -10,7 +10,7 @@ The whole game can be started by calling the main() function.
 
 **Pre-requisites**
 
-The program works with Python3
+The program works with Python3.
 In order to run it, the following libraries need to be installed: random
 
 **Rules**
