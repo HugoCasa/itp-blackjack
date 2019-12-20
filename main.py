@@ -67,13 +67,7 @@ class Deck:
 
     def shuffle(self):
         """Shuffle the deck."""
-        n = len(self.cards)
-        newDeck = []
-        for i in range(1, n+1):
-            r = random.randint(0, n-i)
-            newDeck.append(self.cards[r])
-            del self.cards[r]
-        self.cards = newDeck
+        random.shuffle(self.cards)
 
     def show(self):
         """Show all the cards in the deck."""
