@@ -1,6 +1,6 @@
-Group project (Hugo Casademont, Thibaud Mottier, Francisco Broccard). Blackjack with Python.
+# Group project (Hugo Casademont, Thibaud Mottier, Francisco Broccard). Blackjack with Python.\*\*\*
 
-**About**
+## About
 
 This is a student project of the university of St. Gallen of the course Introduction to Programming.
 The goal of the project was to create a blackjack game simulator.
@@ -8,22 +8,22 @@ The goal of the project was to create a blackjack game simulator.
 We used object-oriented programming to realize the game: for the card, deck, player and pot instance.
 The whole game can be started by calling the main() function.
 
-**Pre-requisites**
+## Pre-requisites
 
 The program works with Python3.
-In order to run it, the following libraries need to be installed: random
+In order to run it, the random library needs to be installed.
 
-**Rules**
+## Rules
 
 In this version of the game, the dealer faces only one player. The basic goal is to have a hand value close to 21 without going over that number. If the player's hand value is lower or equal to 21 and is greated than the dealer's cards value, the player wins the pot.
 
-Values of Cards:
+**Values of Cards:**
 
 - The cards from 2 through 10 are valued at their face value
 - The Jack, Queen, King are all valued at 10.
 - The Ace can be counted as either 1 or 11. It is assumed that its value is 11 until the player goes over 21, in which case the value changes from 11 to 1.
 
-Kickoff:
+**Kickoff:**
 
 First, the player has to bet before receiving the cards. Then, the dealer distributes two face-up cards to the player and two cards (one face-up and one face-down) to himself.
 Once the cards have been distributed, the player has the following options:
