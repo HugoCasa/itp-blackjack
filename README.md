@@ -8,7 +8,7 @@ This is a student project of the university of St. Gallen of the course Introduc
 The goal of the project was to create a blackjack game simulator.
 
 We used object-oriented programming to realize the game: for the card, deck, player and pot instance.
-The whole game can be started by calling: `python main()`
+The whole game can be started by calling the `main()` function.
 
 ## Pre-requisites
 
