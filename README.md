@@ -10,7 +10,7 @@ The goal of the project was to create a blackjack game simulator.
 We used object-oriented programming to realize the game: for the card, deck, player and pot instance.
 The whole game can be started by calling the `main()` function.
 
-## Pre-requisites
+## Pre-requisites
 
 The program works with Python3.
 In order to run it, the random library needs to be installed.
