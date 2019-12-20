@@ -15,7 +15,7 @@ The whole game can be started by calling the `main()` function.
 The program works with Python3.
 In order to run it, the random library needs to be installed.
 
-## Rules
+## Rules
 
 In this version of the game, the dealer faces only one player. The basic goal is to have a hand value close to 21 without going over that number. If the player's hand value is lower or equal to 21 and is greated than the dealer's cards value, the player wins the pot.
 
