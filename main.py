@@ -153,6 +153,9 @@ class Player:
         if amt > self.chips:
             print("You don't have enough money!")
             return False
+        elif amt <= 0:
+            print("You can't bet a negative number of chips!")
+            return False
         else:
             self.chips -= amt
             pot.add(amt)
@@ -247,8 +250,9 @@ def betting(player, dealer, pot):
             bet = input("How much do you want to bet? ")
             bet = int(bet)
             enoughMoney = player.bet(bet, pot)
-            dealer.bet(bet, pot)
-            print("- %d chips" % bet)
+            if enoughMoney:
+                dealer.bet(bet, pot)
+                print("- %d chips" % bet)
         except:
             print("Please enter a valid number")
 
